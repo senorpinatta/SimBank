@@ -70,5 +70,64 @@ public class FrontEnd {
             System.out.println("Error reading file '" + fileName + "'");
         }
         return accountsList;
+<<<<<<< Updated upstream
     }
+=======
+	}
+
+	private static void loggedInOperations(List<String> accountsArray) {
+		boolean loggedOut = true;
+		loggedIn permissionLevel;
+		Scanner keyboard = new Scanner(System.in);
+		
+		while (loggedOut) {
+			System.out.println("Please select login type:\natm\tagent");
+			
+			String typeOfUser = keyboard.next();
+			
+			
+			
+			if (typeOfUser.equalsIgnoreCase("atm")) {
+				permissionLevel = new atmMode();
+			}
+			else {
+				permissionLevel = new tellerMode();
+			}
+			
+			System.out.println("Logged in as " + typeOfUser);
+		}
+
+		int actionCounter = 0;
+		
+		while (!loggedOut) {
+			if (actionCounter == 0) {
+				System.out.println("How can SimBank help you today?");
+			}
+			else {
+				System.out.println("What else can SimBank help you with today?");
+			}
+			
+			String userAction = keyboard.next();
+			if (userAction.equalsIgnoreCase("deposit")) {
+				System.out.println("Please enter account number to deposit to");
+				int accountNumber = keyboard.nextInt();
+				System.out.println("Please enter amount to deposit");
+				int depositAmount = keyboard.nextInt();
+				permissionLevel.deposit(accountNumber, depositAmount, accountsArray);
+			}
+			else if (userAction.equalsIgnoreCase("logout")) {
+				loggedOut = true;
+				System.out.println("Logged out, TSF produced");
+			}
+			actionCounter++;
+		}
+	}
+
+	public static void main(String[] args) 	{
+	
+		List<String> accountsArray = getAccountsList();
+		
+		loggedInOperations(accountsArray);
+		}
+>>>>>>> Stashed changes
 }
