@@ -5,7 +5,6 @@ import java.util.Scanner;
  * Created by benji on 10/18/2016.
  */
 public class LoggedOutState extends CommandManager {
-
     // Default Constructor for the LoggedOutState Class
     public LoggedOutState(ArrayList<String> transactions) {
         super(transactions);

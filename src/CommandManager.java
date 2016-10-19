@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 // parent class for the all the States
 public abstract class CommandManager {
-    private ArrayList<String> transactions;
+    protected ArrayList<String> transactions;
 
     // Default Constructor for the CommandManagerClass
     public CommandManager(ArrayList<String> transactions) {

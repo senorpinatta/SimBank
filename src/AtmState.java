@@ -9,7 +9,23 @@ public class AtmState extends LoggedInState {
         super(transactions, validAccounts);
     }
 
+    /* So we just need to impliment a method for each transaction we can do
+    * CheckList:
+    *   withdrawal
+    *   transfer
+    *   Then the same in AgentState
+    *
+    */
     public int handleCommand(String line) {
+
         return 0;
     }
+
+
+    // Implimentation with the values filled in
+    public int deposit() {
+        return deposit(0, 10000);
+    }
+
+
 }
