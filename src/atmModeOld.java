@@ -1,7 +1,7 @@
 import java.text.MessageFormat;
 import java.util.List;
 
-public class atmMode extends loggedIn {
+public class atmModeOld extends loggedIn {
 
 	@Override
 	public void deposit(int accountNumber, double depositAmount, List<String> accountsList) {
