@@ -8,35 +8,29 @@ public class AtmState extends LoggedInState {
 	private static final int UPPER = 100000;
 	private static final int LOWER = 0;
 	
-	
+	//Default Constructor of the AtmState class. Uses super to call the constructor of
+	//the parent class, enabling late binding.
     public AtmState(ArrayList<String> transactions, ArrayList<String> validAccounts, ArrayList<String> masterTransactions) {
         super(transactions, validAccounts, masterTransactions);
     }
 
-    /* So we just need to impliment a method for each transaction we can do
-    * CheckList:
-    *   withdrawal
-    *   transfer
-    *   Then the same in AgentState
-    *
-    */
+    //"Handles" user input. If input equals one of the available functions, that function
+    //is called and the result of that function is returned to indicate to the frontEnd
+    //what action to perform next. If user input does not match a valid function, 0 is returned.
     public int handleCommand(String line) {
     	int stateIndex = 0;
         if(line.equals("deposit"))
-            // double check these bounds
-            stateIndex = deposit(0, UPPER);
+            stateIndex = deposit(LOWER, UPPER);
         if(line.equals("withdraw"))
-            // double check these bounds
-            stateIndex = deposit(0, UPPER);
+            stateIndex = deposit(LOWER, UPPER);
         if(line.equals("transfer"))
-            // double check these bounds
-            stateIndex = deposit(0, UPPER);
+            stateIndex = deposit(LOWER, UPPER);
 
         return stateIndex;
     }
 
-
-    // Implimentation with the values filled in
+    //Deposit, withdraw, and transfer call their respective parent's method, filling in parameters
+    //(Upper/Lower bounds) appropriate to the atm state.
     public int deposit() {
         return deposit(LOWER, UPPER);
     }
