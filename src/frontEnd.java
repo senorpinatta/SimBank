@@ -1,5 +1,11 @@
 /**
  * Created by benji on 10/18/2016.
+ *
+ * This Class controls the front end for SimBank
+ * It's main function is infinitely looping:
+ *    Get text input
+ *    Process that input (if its a valid command do some operation)
+ *    update the state (if necessary)
  */
 
 import java.io.*;
@@ -7,7 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// This class controls the front end for the SimBank Program
+
 public class FrontEnd {
     // The end of service line as a constant
     private static final String EOSLine = "ES 000 000 000 ***";

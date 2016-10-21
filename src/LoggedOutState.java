@@ -2,6 +2,10 @@ import java.util.ArrayList;
 
 /**
  * Created by benji on 10/18/2016.
+ * This class represents the logged out state
+ * It allows the command login which will cause the front end state to change to LoggedInState
+ * It also allows the special command Terminate, which terminates the front ends loop.
+ * This command is only recognized from a loggedOutState
  */
 public class LoggedOutState extends CommandManager {
    

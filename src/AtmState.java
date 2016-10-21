@@ -2,10 +2,16 @@ import java.util.ArrayList;
 
 /**
  * Created by benji on 10/18/2016.
+ *
+ * This class represents the ATM state
+ *
+ * It allows for the commands deposit, withdraw, and transfer.
  */
 public class AtmState extends LoggedInState {
-	
+
+    // The most money in cents that can be used in an operation
 	private static final int UPPER = 100000;
+    // The least amount of money that can be used in an operation
 	private static final int LOWER = 0;
 	
 	//Default Constructor of the AtmState class. Uses super to call the constructor of

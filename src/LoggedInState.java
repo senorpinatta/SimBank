@@ -3,6 +3,10 @@ import java.util.Scanner;
 
 /**
  * Created by benji on 10/18/2016.
+ * This class represents a LoggedInState
+ * It allows the commands logout, atm, and agent which switch to the corresponding state
+ * It also defines the withdraw, deposit and transfer methods with parameters for the upper
+ * and lower bound which are inherited by both agent and atm which fill in the bounds
  */
 public class LoggedInState extends CommandManager {
     protected ArrayList<String> validAccounts;
@@ -60,7 +64,6 @@ public class LoggedInState extends CommandManager {
         try {
         	System.out.printf(format, "Enter account Number");
     		line = keyboard.nextLine();
-			System.out.printf("TEST 1: %s, 2: %s", accountCheck(line), accountDeleted(line)); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     		if (accountCheck(line) && ! accountDeleted(line))
     			accountNumber = Integer.parseInt(line);
 
@@ -110,7 +113,7 @@ public class LoggedInState extends CommandManager {
     		amount = Integer.parseInt(line);
     		total = transactionSum(String.format("%d", accountNumber), "WD", upperBound) + amount;
     		if (total < lowerBound || total > upperBound) {
-    			System.out.printf("total ammount is not in [%d, %d]\n", lowerBound, upperBound);
+    			System.out.printf("total amount is not in [%d, %d]\n", lowerBound, upperBound);
         		return 0;
         	}
         } catch (NumberFormatException e) {
@@ -162,13 +165,13 @@ public class LoggedInState extends CommandManager {
     		
     		total = transactionSum(String.format("%d", accountNumberFrom), "WD", upperBound) + amount;
     		if (total < lowerBound || total > upperBound) {
-    			System.out.printf("Error total ammount is not in [%d, %d]\n", lowerBound, upperBound);
+    			System.out.printf("Error total amount is not in [%d, %d]\n", lowerBound, upperBound);
         		return 0;
         	}
     		
     		total = transactionSum(String.format("%d", accountNumberTo), "DE", upperBound) + amount;
     		if (total < lowerBound || total > upperBound) {
-    			System.out.printf("Error total ammount is not in [%d, %d]\n", lowerBound, upperBound);
+    			System.out.printf("Error total amount is not in [%d, %d]\n", lowerBound, upperBound);
         		return 0;
         	}
     		

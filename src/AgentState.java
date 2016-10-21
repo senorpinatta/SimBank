@@ -3,10 +3,15 @@ import java.util.Scanner;
 
 /**
  * Created by benji on 10/18/2016.
+ *
+ * This Class represents the Agent state.
+ * It allows the commands withdraw, deposit, transfer, create, and delete.
+ *
  */
 public class AgentState extends LoggedInState {
-
+    // The most money in cents that can be used in an operation
 	private static final int UPPER = 99999999;
+    // The least amount of money that can be used in an operation
 	private static final int LOWER = 0;
 	
 	//Default Constructor of the AgentState class. Uses super to call the constructor of
@@ -131,12 +136,13 @@ public class AgentState extends LoggedInState {
     }
 
     private boolean isValidName(String name) {
-        if (name.length() <= 30          &&
-            name.length() >= 3           &&
-            name.matches("[A-Za-z0-9]+") &&
+        if (name.length() <= 30                      &&
+            name.length() >= 3                       &&
+            name.matches("[A-Za-z0-9]+")             &&
             name.substring(name.length() - 1) != " " &&
-            String.valueOf(name.charAt(0)) != " ")
-                return true;
+            String.valueOf(name.charAt(0)) != " "
+            )
+            return true;
         else {
             System.out.println("Error");
             return false;

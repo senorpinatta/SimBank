@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 /**
  * Created by benji on 10/18/2016.
- */
-
-// parent class for the all the States
+ *
+ * This class is the parent class for all the State objects.
+**/
 public abstract class CommandManager {
     protected ArrayList<String> transactions;
     public static final int spacing = 20;
