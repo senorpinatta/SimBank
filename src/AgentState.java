@@ -9,42 +9,36 @@ public class AgentState extends LoggedInState {
 	private static final int UPPER = 99999999;
 	private static final int LOWER = 0;
 	
+	//Default Constructor of the AgentState class. Uses super to call the constructor of
+	//the parent class, enabling late binding.
     public AgentState(ArrayList<String> transactions, ArrayList<String> validAccounts, ArrayList<String> masterTransactions) {
         super(transactions, validAccounts, masterTransactions);
     }
 
 
-    /*
-    * So we need to add function definitions for:
-    *   withdrawal
-    *   transfer
-    *   create
-    *   delete
-    *   and the handleCommand call like the one or deposit
-    */
+    //"Handles" user input. If input equals one of the available functions, that function
+    //is called and the result of that function is returned to indicate to the frontEnd
+    //what action to perform next. If user input does not match a valid function, 0 is returned.
     @Override
     public int handleCommand(String line) {
         int stateIndex = 0;
         if(line.equals("deposit"))
-            // double check these bounds
-            stateIndex = deposit(0, 10000000);
+            stateIndex = deposit(LOWER, UPPER);
         if(line.equals("withdraw"))
-            // double check these bounds
-            stateIndex = withdraw(0, 10000000);
+            stateIndex = withdraw(LOWER, UPPER);
         if(line.equals("transfer"))
-            // double check these bounds
-            stateIndex = transfer(0, 10000000);
+            stateIndex = transfer(LOWER, UPPER);
         if(line.equals("create"))
-            // double check these bounds
             stateIndex = create();
         if(line.equals("delete"))
-            // double check these bounds
             stateIndex = delete();
 
 
         return stateIndex;
     }
 
+    //Deposit, withdraw, and transfer call their respective parent's method, filling in parameters
+    //(Upper/Lower bounds) appropriate to the agent state.
     public int deposit() {
         return deposit(LOWER, UPPER);
     }
@@ -57,6 +51,12 @@ public class AgentState extends LoggedInState {
     	return transfer(LOWER, UPPER);
     }
     
+    
+    //Unique to the agent state, the create method takes two parameters, an account number
+    //and name, and "creates" or adds a new account to the accounts file. This function
+    //calls the accountCheck method found in the parent class to ensure that the account
+    //number does not already exist and includes if clauses that ensure the parameters
+    //supplied are valid.
     public int create() {
     	Scanner keyboard = new Scanner(System.in);
         boolean flag = true;
@@ -68,7 +68,13 @@ public class AgentState extends LoggedInState {
             	System.out.println("Enter the account Number: ");
         		line = keyboard.nextLine();
         		if (!accountCheck(line)) {
-        			accountNumber = Integer.parseInt(line);
+        			if(line.length() == 8) {
+        				accountNumber = Integer.parseInt(line);
+        			}
+        			else {
+        				System.out.println("Error");
+        				return 0;
+        			} 
         		}
         		else {
         			System.out.println("Error");
@@ -76,7 +82,13 @@ public class AgentState extends LoggedInState {
         		} 
                 line = keyboard.nextLine();
                 if ((line.length() > 30 || line.length() < 3) && line.matches("[A-Za-z0-9]+")) {
-                	name = line;
+                	if(line.substring(line.length() - 1) != " " && String.valueOf(line.charAt(0)) != " ") {
+                		name = line;
+                	}
+                    else {
+            			System.out.println("Error");
+            			return 0;
+            		} 
                 }
                 else {
         			System.out.println("Error");
@@ -91,6 +103,11 @@ public class AgentState extends LoggedInState {
     	return 0;
     }
     
+    
+    //Unique to the agent state, the delete method takes two parameters, an account number
+    //and name, and "deletes" or removes an existing account from the accounts file. This 
+    //function calls the accountCheck method found in the parent class to check that the 
+    //account number exists and includes if clauses that check that the name supplied is valid.
     public int delete() {
     	Scanner keyboard = new Scanner(System.in);
         boolean flag = true;
@@ -110,7 +127,13 @@ public class AgentState extends LoggedInState {
         		} 
                 line = keyboard.nextLine();
                 if ((line.length() > 30 || line.length() < 3) && line.matches("[A-Za-z0-9]+")) {
-                	name = line;
+                	if(line.substring(line.length() - 1) != " " && String.valueOf(line.charAt(0)) != " ") {
+                		name = line;
+                	}
+                    else {
+            			System.out.println("Error");
+            			return 0;
+            		} 
                 }
                 else {
         			System.out.println("Error");
