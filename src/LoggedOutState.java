@@ -14,12 +14,17 @@ public class LoggedOutState extends CommandManager {
     //If user inputs anything else, 0 is returned.
     public int handleCommand(String line) {
         // 1 informs the FrontEnd to change to a LoggedInState
-        if (line.trim().equals("login")) {
+        if (line.equals("login"))
             return 1;
+        if (line.equals("Terminate"))
+            return -1; // Breaks the loop in frontEnd
+        else {
+            System.out.println("Error");
+            return 0; // Does not change State
         }
-        // Does not change State
-        else
-            return 0;
+
+
+
     }
 
 }

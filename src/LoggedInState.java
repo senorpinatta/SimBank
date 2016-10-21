@@ -13,19 +13,22 @@ public class LoggedInState extends CommandManager {
     public LoggedInState(ArrayList<String> transactions, ArrayList<String> validAccounts, ArrayList<String> masterTransactions) {
         super(transactions);
         this.validAccounts = validAccounts;
-        mastTrans = masterTransactions;
+        this.mastTrans = masterTransactions;
     }
 
     //"Handles" user input. Input equaling "atm" returns 2, "agent" returns 3, anything
     //else returns 0. 2 tells the front end to enter an atm state, and 3 an agent state.
     public int handleCommand(String line) {
-        if (line.trim().equals("atm"))
+        if (line.equals("atm"))
             return 2;
-        else
-            if (line.trim().equals("agent"))
-                return 3;
-            else
-                return 0;
+		if (line.equals("agent"))
+			return 3;
+		if (line.equals("logout"))
+			return 4;
+		else {
+			System.out.println("Error");
+			return 0;
+			}
     }
 
     //Checks through the list of valid accounts to see if any match the supplied account number.
@@ -50,28 +53,27 @@ public class LoggedInState extends CommandManager {
     //transaction code is written to the temporary transaction file, before returning 0.
     protected int deposit(int lowerBound, int upperBound) {
         Scanner keyboard = new Scanner(System.in);
-        boolean flag = true;
         String line;
         int total = 0;
         int accountNumber = 0;
         int amount = 0;
         try {
-        	System.out.println("Enter the account Number: ");
+        	System.out.printf(format, "Enter account Number");
     		line = keyboard.nextLine();
-    		if (accountCheck(line)) {
-    			flag = false;
+			System.out.printf("TEST 1: %s, 2: %s", accountCheck(line), accountDeleted(line)); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    		if (accountCheck(line) && ! accountDeleted(line))
     			accountNumber = Integer.parseInt(line);
-    		}
+
     		else {
     			System.out.println("Error");
     			return 0;
     		}
-    		System.out.println("Enter the amount:");
+    		System.out.printf(format, "Enter amount in cents");
     		line = keyboard.nextLine();
     		amount = Integer.parseInt(line);
     		total = transactionSum(String.format("%d", accountNumber), "DE", upperBound) + amount;
     		if (total < lowerBound || total > upperBound) {
-    			System.out.printf("total ammount is not in [%d, %d]\n", lowerBound, upperBound);
+    			System.out.printf("Error total amount is not in [%d, %d]\n", lowerBound, upperBound);
         		return 0;
         	}
         } catch (NumberFormatException e) {
@@ -88,23 +90,22 @@ public class LoggedInState extends CommandManager {
     //transaction code is written to the temporary transaction file, before returning 0.
     protected int withdraw(int lowerBound, int upperBound) {
         Scanner keyboard = new Scanner(System.in);
-        boolean flag = true;
         String line;
         int total = 0;
         int accountNumber = 0;
         int amount = 0;
         try {
-        	System.out.println("Enter the account Number: ");
+			System.out.printf(format, "Enter account Number");
     		line = keyboard.nextLine();
-    		if (accountCheck(line)) {
-    			flag = false;
+
+    		if (accountCheck(line) || ! accountDeleted(line)) {
     			accountNumber = Integer.parseInt(line);
     		}
     		else {
     			System.out.println("Error");
     			return 0;
     		}
-    		System.out.println("Enter the amount:");
+			System.out.printf(format, "Enter amount in cents");
     		line = keyboard.nextLine();
     		amount = Integer.parseInt(line);
     		total = transactionSum(String.format("%d", accountNumber), "WD", upperBound) + amount;
@@ -113,7 +114,6 @@ public class LoggedInState extends CommandManager {
         		return 0;
         	}
         } catch (NumberFormatException e) {
-        	System.out.println("Error");
         	return 0;
         }
         transactions.add(String.format("WD %d 00000000 000 %d ***", accountNumber, amount));
@@ -136,7 +136,7 @@ public class LoggedInState extends CommandManager {
         try {
         	System.out.println("Enter the account Number to withdraw from: ");
     		line = keyboard.nextLine();
-    		if (accountCheck(line)) {
+    		if (accountCheck(line) && ! accountDeleted(line)) {
     			flag = false;
     			accountNumberFrom = Integer.parseInt(line);
     		}
@@ -147,7 +147,7 @@ public class LoggedInState extends CommandManager {
     		
     		System.out.println("Enter the account Number to deposit to: ");
     		line = keyboard.nextLine();
-    		if (accountCheck(line)) {
+    		if (accountCheck(line) && ! accountDeleted(line)) {
     			flag = false;
     			accountNumberTo = Integer.parseInt(line);
     		}
@@ -155,20 +155,20 @@ public class LoggedInState extends CommandManager {
     			System.out.println("Error");
     			return 0;
     		}
-    		
-    		System.out.println("Enter the amount:");
+
+			System.out.printf(format, "Enter amount in cents");
     		line = keyboard.nextLine();
     		amount = Integer.parseInt(line);
     		
     		total = transactionSum(String.format("%d", accountNumberFrom), "WD", upperBound) + amount;
     		if (total < lowerBound || total > upperBound) {
-    			System.out.printf("total ammount is not in [%d, %d]\n", lowerBound, upperBound);
+    			System.out.printf("Error total ammount is not in [%d, %d]\n", lowerBound, upperBound);
         		return 0;
         	}
     		
     		total = transactionSum(String.format("%d", accountNumberTo), "DE", upperBound) + amount;
     		if (total < lowerBound || total > upperBound) {
-    			System.out.printf("total ammount is not in [%d, %d]\n", lowerBound, upperBound);
+    			System.out.printf("Error total ammount is not in [%d, %d]\n", lowerBound, upperBound);
         		return 0;
         	}
     		
@@ -195,7 +195,7 @@ public class LoggedInState extends CommandManager {
     }
     
     
-    //This function is called to enforce transaction limits for atm users. If the user is 
+    //This method is called to enforce transaction limits for atm users. If the user is
     //an agent, it returns 0 to allow the transaction to continue. If the user is an agent,
     //It calls sumList to read the temporary & master transactions list and return the total
     //amount that would be deposited/withdrawn if this transaction continues.
@@ -208,7 +208,22 @@ public class LoggedInState extends CommandManager {
     		sum += sumList(mastTrans, accNum, transType);
     	}
 		return sum;
-    	
     }
+
+    // This method checks both the masterTransactions list and the temporaryTransactions List for a delete operation on the supplied account number
+	private boolean accountDeleted(String accountNum) {
+		return deletedCheckList(accountNum, mastTrans) || deletedCheckList(accountNum, transactions);
+	}
+    // This method checks a list for any lines with have deleted an account with the supplied account number
+    private boolean deletedCheckList(String accountNum, ArrayList<String> list) {
+		String[] parts;
+		for (String line : list) {
+			parts = line.split(" ");
+			if (parts[0] == "DL")
+				if (parts[1].equals(accountNum))
+					return true;
+		}
+		return false;
+	}
     	
 }

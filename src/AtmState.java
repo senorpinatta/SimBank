@@ -19,6 +19,8 @@ public class AtmState extends LoggedInState {
     //what action to perform next. If user input does not match a valid function, 0 is returned.
     public int handleCommand(String line) {
     	int stateIndex = 0;
+        if (line.equals("logout"))
+            stateIndex = 4;
         if(line.equals("deposit"))
             stateIndex = deposit(LOWER, UPPER);
         if(line.equals("withdraw"))

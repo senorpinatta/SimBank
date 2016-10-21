@@ -4,6 +4,6 @@
 public class startPoint {
     // Starting Point for the program makes a new FrontEnd object which will loop endlessly accepting terminal input
     public static void main(String[] args) {
-        frontEnd fEnd= new frontEnd();
+        FrontEnd fEnd= new FrontEnd("AccountsFile.txt", "TSF.txt");
     }
 }

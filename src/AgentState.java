@@ -22,6 +22,8 @@ public class AgentState extends LoggedInState {
     @Override
     public int handleCommand(String line) {
         int stateIndex = 0;
+        if(line.equals("logout"))
+            stateIndex = 4;
         if(line.equals("deposit"))
             stateIndex = deposit(LOWER, UPPER);
         if(line.equals("withdraw"))
@@ -81,26 +83,17 @@ public class AgentState extends LoggedInState {
         			return 0;
         		} 
                 line = keyboard.nextLine();
-                if ((line.length() > 30 || line.length() < 3) && line.matches("[A-Za-z0-9]+")) {
-                	if(line.substring(line.length() - 1) != " " && String.valueOf(line.charAt(0)) != " ") {
-                		name = line;
-                	}
-                    else {
-            			System.out.println("Error");
-            			return 0;
-            		} 
-                }
-                else {
-        			System.out.println("Error");
-        			return 0;
-        		} 
+                if (isValidName(line))
+                    name = line;
                 flag = false;
             } catch (NumberFormatException e) {
                 // do nothing one of the inputs was bad
             }
         }
         transactions.add(String.format("CR %d 00000000 000 %s", accountNumber, name));
-    	return 0;
+        // end session because of spec. of create see lecture 5 in CISC 327 notes
+        // "No new transactions should be accepted in this session
+    	return 4;
     }
     
     
@@ -126,19 +119,8 @@ public class AgentState extends LoggedInState {
         			return 0;
         		} 
                 line = keyboard.nextLine();
-                if ((line.length() > 30 || line.length() < 3) && line.matches("[A-Za-z0-9]+")) {
-                	if(line.substring(line.length() - 1) != " " && String.valueOf(line.charAt(0)) != " ") {
-                		name = line;
-                	}
-                    else {
-            			System.out.println("Error");
-            			return 0;
-            		} 
-                }
-                else {
-        			System.out.println("Error");
-        			return 0;
-        		} 
+                if (isValidName(line))
+                    name = line;
                 flag = false;
             } catch (NumberFormatException e) {
                 // do nothing one of the inputs was bad
@@ -146,5 +128,18 @@ public class AgentState extends LoggedInState {
         }
         transactions.add(String.format("DL %d 00000000 000 %s", accountNumber, name));
     	return 0;
+    }
+
+    private boolean isValidName(String name) {
+        if (name.length() <= 30          &&
+            name.length() >= 3           &&
+            name.matches("[A-Za-z0-9]+") &&
+            name.substring(name.length() - 1) != " " &&
+            String.valueOf(name.charAt(0)) != " ")
+                return true;
+        else {
+            System.out.println("Error");
+            return false;
+        }
     }
 }
