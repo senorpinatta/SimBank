@@ -7,7 +7,7 @@ import java.util.ArrayList;
 **/
 public abstract class CommandManager {
     protected ArrayList<String> transactions;
-    public static final int spacing = 20;
+    public static final int spacing = 21;
     public static final String format = "%" + spacing + "s -> ";
 
     // Default Constructor for the CommandManagerClass

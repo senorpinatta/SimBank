@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class FrontEnd {
     // The end of service line as a constant
-    private static final String EOSLine = "ES 000 000 000 ***";
+    private static final String EOSLine = "ES 00000000 00000000 000 ***";
     // An object representation of the State of the program
     CommandManager commMan;
     // A list of valid accounts
@@ -116,15 +116,16 @@ public class FrontEnd {
             FileWriter fileWriter = new FileWriter(TSFile);
             BufferedWriter writer = new BufferedWriter(fileWriter);
             for (String line : temporaryTransactions)
-                writer.write(line);
+                writer.write(line + "\n");
             writer.write(EOSLine);
+            writer.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
 
     private void printPrompt() {
-        int spacing = 20;
+        int spacing = 21;
         String format = "%" + spacing + "s -> ";
         if (commMan instanceof AgentState) {
             System.out.printf(format, "Agent");
