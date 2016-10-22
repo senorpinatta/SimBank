@@ -93,6 +93,7 @@ public class AgentState extends LoggedInState {
                 flag = false;
             } catch (NumberFormatException e) {
                 // do nothing one of the inputs was bad
+                return 0;
             }
         }
         transactions.add(String.format("CR %d 00000000 000 %s", accountNumber, name));
@@ -129,6 +130,7 @@ public class AgentState extends LoggedInState {
                 flag = false;
             } catch (NumberFormatException e) {
                 // do nothing one of the inputs was bad
+                return 0;
             }
         }
         transactions.add(String.format("DL %d 00000000 000 %s", accountNumber, name));
