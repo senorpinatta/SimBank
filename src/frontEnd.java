@@ -68,7 +68,7 @@ public class FrontEnd {
     */
     private void updateCommMan(int stateIndex) {
         if (stateIndex == 1) { // we have logged in reads in accounts file
-            validAccounts = getAccountsList("AccountsFile.txt");
+            validAccounts = getAccountsList(accFile);
             commMan = new LoggedInState(temporaryTransactions, validAccounts, masterTransactions);
         }
         if (stateIndex == 2)
